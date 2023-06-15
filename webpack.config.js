@@ -7,7 +7,7 @@ module.exports = (_, argv) => {
 
     return {
         target: 'web',
-        entry: isDev ? './src/app.ts' : './src/custom-component.ts',
+        entry: isDev ? './src/app.ts' : './src/index.ts',
         output: {
             filename: isDev ? 'bundle.js' : 'custom-component.js',
             path: path.resolve(__dirname, 'dist'),

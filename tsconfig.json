@@ -3,8 +3,7 @@
         "target": "ES2017",
         "module": "ES2015",
         "outDir": "dist",
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": false
+        "moduleResolution": "node"
     },
     "include": ["src/**/*"]
 }

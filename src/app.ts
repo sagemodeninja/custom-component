@@ -1,8 +1,7 @@
-import { ComponentRegistry } from './component-registry';
-import { CustomComponent } from './custom-component';
+import { customComponent, CustomComponent } from './';
 
+@customComponent('demo-component')
 class DemoComponent extends CustomComponent {
-    static elementName = 'demo-component';
     static styles = `
         span {
             color: red;
@@ -22,5 +21,3 @@ class DemoComponent extends CustomComponent {
         `;
     }
 }
-
-ComponentRegistry.createRegistry().register(DemoComponent);

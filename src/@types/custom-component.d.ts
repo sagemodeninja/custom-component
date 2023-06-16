@@ -1,18 +1,15 @@
 declare module '@sagemodeninja/custom-component' {
-    export class ComponentRegistry {
-        static createRegistry(): ComponentRegistry;
-        register(...component: (typeof CustomComponent)[]): void;
-    }
+    type Constructor = new (...args: any[]) => HTMLElement;
+
+    export function customComponent(
+        name: string
+    ): (constructor: Constructor) => void;
 
     export class CustomComponent extends HTMLElement {
-        static elementName: string;
-        static styles?: string;
-        get template(): HTMLTemplateElement;
-        get dom(): HTMLCollection;
         /**
-         * Apply default design tokens.
+         * Style
          */
-        setDefaultTokens(): void;
+        static styles?: string;
         /**
          * Returns the DOM string for this component.
          */

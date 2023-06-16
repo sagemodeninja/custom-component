@@ -1,6 +1,6 @@
 {
     "name": "@sagemodeninja/custom-component",
-    "version": "0.1.0-alpha.4",
+    "version": "1.0.0-beta.10",
     "description": "Custom web components",
     "main": "dist/custom-component.js",
     "types": "src/@types/custom-component.d.ts",

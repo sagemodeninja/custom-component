@@ -1,33 +1,42 @@
-import { ComponentRegistry } from './component-registry';
-
 export class CustomComponent extends HTMLElement {
-    static elementName: string;
-    static styles?: string;
+    private static _templates: { [name: string]: HTMLTemplateElement } = {};
+
+    public static styles?: string;
 
     constructor() {
         super();
 
+        const template = this.resolveTemplate();
+
         this.attachShadow({ mode: 'open' });
-        this.shadowRoot.appendChild(this.template.content.cloneNode(true));
-        this.shadowRoot.append(...this.dom);
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
+        this.shadowRoot.append(...this.virtualDOM);
     }
 
-    get template() {
+    private resolveTemplate() {
+        const name = this.constructor.name;
+
+        if (name in CustomComponent._templates)
+            return CustomComponent._templates[name];
+
+        return this.createTemplate(name);
+    }
+
+    private createTemplate(name: string): HTMLTemplateElement {
+        const template = document.createElement('template');
         const constructor = Object.getPrototypeOf(this).constructor;
-        return ComponentRegistry.templates[constructor.elementName];
+
+        template.innerHTML = `<style>${constructor.styles ?? ''}</style>`;
+        CustomComponent._templates[name] = template;
+
+        return template;
     }
 
-    get dom() {
+    get virtualDOM() {
         const parser = new DOMParser();
         const content = parser.parseFromString(this.render(), 'text/html');
 
         return content.body.children;
-    }
-
-    public static setDefaultTokens() {
-        console.warn(
-            'Default tokens are not set, consider implementing this feature.'
-        );
     }
 
     public render(): string {

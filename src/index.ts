@@ -1,2 +1,2 @@
+export * from './attributes';
 export * from './custom-component';
-export * from './component-registry';

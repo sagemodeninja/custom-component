@@ -10,6 +10,7 @@ declare module '@sagemodeninja/custom-component' {
          * Style
          */
         static styles?: string;
+        // connectedCallback(): void;
         /**
          * Returns the DOM string for this component.
          */

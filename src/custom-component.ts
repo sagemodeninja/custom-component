@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { OBSERVED_STATES } from './attributes';
+import { OBSERVED_PROPERTIES } from './attributes';
 
 export class CustomComponent extends HTMLElement {
     private static _templates: { [name: string]: HTMLTemplateElement } = {};
@@ -7,7 +7,8 @@ export class CustomComponent extends HTMLElement {
     public static styles?: string;
 
     public static get observedAttributes() {
-        return Reflect.getMetadata(OBSERVED_STATES, this);
+        const properties = Reflect.getMetadata(OBSERVED_PROPERTIES, this);
+        return properties ? Object.keys(properties) : [];
     }
 
     constructor() {
@@ -20,12 +21,27 @@ export class CustomComponent extends HTMLElement {
         this.shadowRoot.append(...this.virtualDOM);
     }
 
-    public attributeChangedCallback(prop: string, _: any, value: any) {
-        const type = Reflect.getMetadata("design:type", this, prop);
-        this[prop] = type(value);
+    get virtualDOM() {
+        const parser = new DOMParser();
+        const content = parser.parseFromString(this.render(), 'text/html');
+
+        return content.body.children;
     }
 
-    protected onStateChanged(property: string, oldValue: any, newValue: any) { }
+    public render(): string {
+        throw new Error('Not implemented!');
+    }
+
+    public attributeChangedCallback(name: string, _: any, value: any) {
+        const properties = Reflect.getMetadata(OBSERVED_PROPERTIES, this.constructor);
+        const key = properties[name];
+        const oldValue = this[key];
+
+        this[`_${key}`] = value;
+        this.notifyStateHasChanged(key, oldValue);
+    }
+
+    protected stateHasChanged(property: string, oldValue: any, newValue: any) { }
 
     private resolveTemplate() {
         const name = this.constructor.name;
@@ -46,14 +62,7 @@ export class CustomComponent extends HTMLElement {
         return template;
     }
 
-    get virtualDOM() {
-        const parser = new DOMParser();
-        const content = parser.parseFromString(this.render(), 'text/html');
-
-        return content.body.children;
-    }
-
-    public render(): string {
-        throw new Error('Not implemented!');
+    private notifyStateHasChanged(prop: string, oldValue: any) {
+        this.stateHasChanged(prop, oldValue, this[prop]);
     }
 }

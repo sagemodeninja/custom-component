@@ -1,20 +1,27 @@
 declare module '@sagemodeninja/custom-component' {
     type Constructor = new (...args: any[]) => HTMLElement;
 
+    export interface IAttributeConverter {
+        from(value: string, type: any): any;
+        to(value: any, type: any): string;
+    }
+
+    export class CustomComponent extends HTMLElement {
+        public static styles?: string;
+        public render(): string;
+        protected stateHasChanged(property: string, oldValue: any, newValue: any): void;
+    }
+
+    export class PropertyOptions {
+        public attribute?: string | boolean;
+        public converter?: IAttributeConverter;
+    }
+
     export function customComponent(name: string): (constructor: Constructor) => void;
+
+    export function property(options?: PropertyOptions): (target: any, key: string) => void;
 
     export function state(): (target: any, key: string) => void;
 
     export function query(selector: string): (target: any, key: string) => void;
-
-    export class CustomComponent extends HTMLElement {
-        /**
-         * Style
-         */
-        static styles?: string;
-        /**
-         * Returns the DOM string for this component.
-         */
-        render(): string;
-    }
 }

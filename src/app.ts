@@ -1,4 +1,9 @@
-import { customComponent, state, CustomComponent, query } from './';
+import { CustomComponent } from './custom-component';
+import { customComponent, state, query, property } from './attributes';
+
+class TestObject {
+    value: number;
+}
 
 @customComponent('demo-component')
 class DemoComponent extends CustomComponent {
@@ -12,8 +17,14 @@ class DemoComponent extends CustomComponent {
         }
     `;
 
-    @state()
+    @property({ attribute: 'foreground-color' })
     public color: string;
+
+    @property()
+    public rates: number[];
+
+    @property()
+    public test: TestObject;
 
     @query('.text')
     private _textSpan: HTMLSpanElement;
@@ -27,9 +38,14 @@ class DemoComponent extends CustomComponent {
         `;
     }
 
-    protected override onStateChanged(prop: string, _: any, value: any) {
+    protected override stateHasChanged(prop: string, _: any, value: any) {
+        console.log(prop, _, value);
         switch (prop) {
             case 'color': this._textSpan.style.color = value;
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const demo = document.getElementById('demo') as DemoComponent;
+})

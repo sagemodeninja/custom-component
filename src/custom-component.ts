@@ -1,7 +1,14 @@
+import 'reflect-metadata';
+import { OBSERVED_STATES } from './attributes';
+
 export class CustomComponent extends HTMLElement {
     private static _templates: { [name: string]: HTMLTemplateElement } = {};
 
     public static styles?: string;
+
+    public static get observedAttributes() {
+        return Reflect.getMetadata(OBSERVED_STATES, this);
+    }
 
     constructor() {
         super();
@@ -12,6 +19,13 @@ export class CustomComponent extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
         this.shadowRoot.append(...this.virtualDOM);
     }
+
+    public attributeChangedCallback(prop: string, _: any, value: any) {
+        const type = Reflect.getMetadata("design:type", this, prop);
+        this[prop] = type(value);
+    }
+
+    protected onStateChanged(property: string, oldValue: any, newValue: any) { }
 
     private resolveTemplate() {
         const name = this.constructor.name;

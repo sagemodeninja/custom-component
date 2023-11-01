@@ -1,4 +1,4 @@
-import { customComponent, CustomComponent } from './';
+import { customComponent, state, CustomComponent, query } from './';
 
 @customComponent('demo-component')
 class DemoComponent extends CustomComponent {
@@ -12,12 +12,24 @@ class DemoComponent extends CustomComponent {
         }
     `;
 
+    @state()
+    public color: string;
+
+    @query('.text')
+    private _textSpan: HTMLSpanElement;
+
     public render(): string {
         return `
             <div>
-                <span>I am a demo!</span>
+                <span class="text">I am a demo!</span>
                 <slot></slot>
             </div>
         `;
+    }
+
+    protected override onStateChanged(prop: string, _: any, value: any) {
+        switch (prop) {
+            case 'color': this._textSpan.style.color = value;
+        }
     }
 }

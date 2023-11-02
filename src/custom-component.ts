@@ -11,6 +11,9 @@ export class CustomComponent extends HTMLElement {
         return properties ? Object.keys(properties) : [];
     }
 
+    private _changeDebounce: any;
+    private _changes: Map<string, any> = new Map();
+
     constructor() {
         super();
 
@@ -41,7 +44,7 @@ export class CustomComponent extends HTMLElement {
         this.notifyStateHasChanged(key, oldValue);
     }
 
-    protected stateHasChanged(property: string, oldValue: any, newValue: any) { }
+    protected stateHasChanged(changes: Map<string, any>) { }
 
     private resolveTemplate() {
         const name = this.constructor.name;
@@ -63,6 +66,13 @@ export class CustomComponent extends HTMLElement {
     }
 
     private notifyStateHasChanged(prop: string, oldValue: any) {
-        this.stateHasChanged(prop, oldValue, this[prop]);
+        clearTimeout(this._changeDebounce);
+
+        this._changeDebounce = setTimeout(() => {
+            this.stateHasChanged(this._changes);
+            this._changes.clear();
+        }, 50);
+
+        this._changes.set(prop, oldValue);
     }
 }

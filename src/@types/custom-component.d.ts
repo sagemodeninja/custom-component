@@ -9,7 +9,7 @@ declare module '@sagemodeninja/custom-component' {
     export class CustomComponent extends HTMLElement {
         public static styles?: string;
         public render(): string;
-        protected stateHasChanged(property: string, oldValue: any, newValue: any): void;
+        protected stateHasChanged(changes: Map<string, any>): void;
     }
 
     export class PropertyOptions {

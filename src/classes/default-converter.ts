@@ -2,6 +2,9 @@ import { IAttributeConverter } from '../interfaces';
 
 export class DefaultConverter implements IAttributeConverter {
     from(value: string, type: any) {
+        if (!value)
+            return undefined;
+
         switch (type.name) {
             case 'String':
             case 'Number':
@@ -10,12 +13,12 @@ export class DefaultConverter implements IAttributeConverter {
                 return value && value.toLowerCase() === 'true';
             case 'Array':
             default:
-                return value && JSON.parse(value);
+                return JSON.parse(value);
         }
     }
 
     to(value: any) {
-        return value.toString();
+        return value?.toString();
     }
 }
 

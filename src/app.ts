@@ -1,5 +1,5 @@
 import { CustomComponent } from './custom-component';
-import { customComponent, state, query, property } from './attributes';
+import { customComponent, query, property } from './attributes';
 
 class TestObject {
     value: number;
@@ -21,6 +21,9 @@ class DemoComponent extends CustomComponent {
     public color: string;
 
     @property()
+    public size: number;
+
+    @property()
     public rates: number[];
 
     @property()
@@ -38,11 +41,12 @@ class DemoComponent extends CustomComponent {
         `;
     }
 
-    protected override stateHasChanged(prop: string, _: any, value: any) {
-        console.log(prop, _, value);
-        switch (prop) {
-            case 'color': this._textSpan.style.color = value;
-        }
+    protected override stateHasChanged(changes: Map<string, any>) {
+        Object.keys(changes).forEach(prop => {
+            switch (prop) {
+                case 'color': this._textSpan.style.color = this.color;
+            }
+        })
     }
 }
 

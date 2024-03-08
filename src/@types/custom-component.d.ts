@@ -23,5 +23,7 @@ declare module '@sagemodeninja/custom-component' {
 
     export function state(): (target: any, key: string) => void;
 
-    export function query(selector: string): (target: any, key: string) => void;
+    export function query(selector: string, host?: boolean): (target: any, key: string) => void;
+
+    export function queryAll(selector: string, host?: boolean): (target: any, key: string) => void;
 }

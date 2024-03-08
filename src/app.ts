@@ -1,5 +1,5 @@
 import { CustomComponent } from './custom-component';
-import { customComponent, query, property } from './attributes';
+import { customComponent, query, property, queryAll } from './attributes';
 
 class TestObject {
     value: number;
@@ -32,10 +32,20 @@ class DemoComponent extends CustomComponent {
     @query('.text')
     private _textSpan: HTMLSpanElement;
 
+    @queryAll('.text')
+    private _textSpans: NodeListOf<HTMLSpanElement>;
+
+    @query('.input', true)
+    private _input: HTMLInputElement;
+
+    @queryAll('.input', true)
+    private _inputs: NodeListOf<HTMLInputElement>;
+
     public render(): string {
         return `
             <div>
                 <span class="text">I am a demo!</span>
+                <span class="text">I am another text!</span>
                 <slot></slot>
             </div>
         `;
@@ -48,8 +58,16 @@ class DemoComponent extends CustomComponent {
             }
         })
     }
+
+    public debug() {
+        console.log('query()', this._textSpan)
+        console.log('queryAll()', this._textSpans)
+        console.log('query(_, true)', this._input)
+        console.log('queryAll(_, true)', this._inputs)
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const demo = document.getElementById('demo') as DemoComponent;
+    const demo = document.getElementById('demo') as DemoComponent
+    demo.debug()
 })

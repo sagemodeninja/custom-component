@@ -1,5 +1,8 @@
-import 'reflect-metadata';
-import { OBSERVED_PROPERTIES } from './attributes';
+import 'reflect-metadata'
+import {
+    StateMachine,
+    AttributeMachine
+} from '@/classes'
 
 export class CustomComponent extends HTMLElement {
     private static _templates: { [name: string]: HTMLTemplateElement } = {};
@@ -7,8 +10,7 @@ export class CustomComponent extends HTMLElement {
     public static styles?: string;
 
     public static get observedAttributes() {
-        const properties = Reflect.getMetadata(OBSERVED_PROPERTIES, this);
-        return properties ? Object.keys(properties) : [];
+        return AttributeMachine.get(this)
     }
 
     private _changeDebounce: any;
@@ -36,12 +38,7 @@ export class CustomComponent extends HTMLElement {
     }
 
     public attributeChangedCallback(name: string, _: any, value: any) {
-        const properties = Reflect.getMetadata(OBSERVED_PROPERTIES, this.constructor);
-        const key = properties[name];
-        const oldValue = this[key];
-
-        this[`_${key}`] = value;
-        this.notifyStateHasChanged(key, oldValue);
+        StateMachine.parse(this, name, value)
     }
 
     protected stateHasChanged(changes: Map<string, any>) { }

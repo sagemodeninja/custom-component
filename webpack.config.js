@@ -36,6 +36,9 @@ module.exports = (_, argv) => {
         },
         resolve: {
             extensions: ['.ts', '.js'],
+            alias: {
+                '@': path.resolve(__dirname, 'src'),
+            }
         },
         devServer: isDev
             ? {

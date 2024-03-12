@@ -1,4 +1,4 @@
-import { IAttributeConverter } from '../interfaces';
+import { IAttributeConverter } from '@/interfaces'
 
 export class PropertyOptions {
     public attribute?: string | boolean;

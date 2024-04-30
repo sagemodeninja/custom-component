@@ -2,6 +2,13 @@ import { IAttributeConverter } from '../interfaces';
 
 export class DefaultConverter implements IAttributeConverter {
     from(value: string, type: any) {
+
+        if (value === 'undefined')
+            return undefined
+
+        if (value === 'null')
+            return null
+
         switch (type.name) {
             case 'String':
             case 'Number':
@@ -15,7 +22,7 @@ export class DefaultConverter implements IAttributeConverter {
     }
 
     to(value: any) {
-        return value?.toString();
+        return value?.toString()
     }
 }
 

@@ -21,7 +21,7 @@ declare module '@sagemodeninja/custom-component' {
 
     export function property(options?: PropertyOptions): (target: any, key: string) => void;
 
-    export function state(): (target: any, key: string) => void;
+    export function state(options?: PropertyOptions): (target: any, key: string) => void;
 
     export function query(selector: string): (target: any, key: string) => void;
 }

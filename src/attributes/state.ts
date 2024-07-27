@@ -53,8 +53,8 @@ export function property(options?: PropertyOptions) {
     }
 }
 
-export function state() {
-    return property({ attribute: false });
+export function state(options?: PropertyOptions) {
+    return property({ ...options, attribute: false });
 }
 
 function createProxy(instance: any, key: string, value: object) {

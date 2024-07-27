@@ -18,7 +18,9 @@ export class DefaultConverter implements IAttributeConverter {
     }
 
     to(value: any) {
-        return value?.toString();
+        return typeof value === 'object'
+            ? value && JSON.stringify(value)
+            : value.toString();
     }
 }
 
